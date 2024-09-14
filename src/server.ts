@@ -7,15 +7,20 @@ import { config } from '@auth/config/config';
 import { securityMiddleware, standardMiddleware, errorHandlerMiddleware } from '@auth/middlewares';
 import { checkElasticConnection } from '@auth/elasticsearch/elasticsearch';
 import { appRoutes } from '@auth/routes';
+import { createQueueConnection } from '@auth/queues/connection';
+import { Channel } from 'amqplib';
 
 const SERVER_PORT = config.SERVER_PORT;
 const log: Logger = winstonLogger(`${config.ELASTIC_SEARCH_URL}`, 'notificationServer', 'debug');
+
+export let authChannel: Channel;
 
 export function start(app: Application): void {
   securityMiddleware(app);
   standardMiddleware(app);
   appRoutes(app);
   checkElasticConnection();
+  startQueues();
   errorHandlerMiddleware(app, log);
   startServer(app);
 }
@@ -38,4 +43,8 @@ function startHttpServer(httpServer: http.Server) {
   } catch (error) {
     log.log('error', 'AuthService startServer() error method:', error);
   }
+}
+
+async function startQueues(): Promise<void> {
+  authChannel = (await createQueueConnection()) as Channel;
 }
