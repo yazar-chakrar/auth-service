@@ -21,6 +21,10 @@ const AuthModel: ModelDefined<IAuthDocument, AuthUserCreationAttributes> & AuthM
       type: DataTypes.STRING,
       allowNull: false
     },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     profilePublicId: {
       type: DataTypes.STRING,
       allowNull: false

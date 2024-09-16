@@ -11,7 +11,7 @@ import { createQueueConnection } from '@auth/queues/connection';
 import { Channel } from 'amqplib';
 
 const SERVER_PORT = config.SERVER_PORT;
-const log: Logger = winstonLogger(`${config.ELASTIC_SEARCH_URL}`, 'notificationServer', 'debug');
+const log: Logger = winstonLogger(`${config.ELASTIC_SEARCH_URL}`, 'AuthService', 'debug');
 
 export let authChannel: Channel;
 
